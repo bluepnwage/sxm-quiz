@@ -3,10 +3,11 @@ import { Badge, Title } from "@aomdev/ui";
 import { Avatar } from "@/components/avatar";
 import { formatDate } from "@/lib/format-date";
 import Link from "next/link";
-import { allBlogs } from "contentlayer/generated";
 import { Author } from "@/components/author";
+import { getBlogs } from "@/lib/get-blogs";
 
-export default function Page() {
+export default async function Page() {
+  const blogs = await getBlogs();
   return (
     <main>
       <header className="mb-16 lg:mb-20">
@@ -19,7 +20,7 @@ export default function Page() {
         <p className="text-xl text-center">Get updates and insights about SXM Quiz!</p>
       </header>
       <div className="grid lg:grid-cols-3 gap-x-10 gap-y-20 w-11/12 lg:container mx-auto mb-36">
-        {allBlogs.map((blog) => {
+        {blogs.map((blog) => {
           const [firstName, lastName] = blog.author.split(" ");
           return (
             <Link

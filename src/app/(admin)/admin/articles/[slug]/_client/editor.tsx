@@ -1,5 +1,5 @@
 "use client";
-import { ArticleData, createMarkdown } from "@/lib/create-markdown";
+import { createMarkdown } from "@/lib/create-markdown";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect } from "react";
@@ -8,11 +8,12 @@ import Link from "@tiptap/extension-link";
 import styles from "./editor.module.css";
 import { BubbleMenu } from "./bubble-menu";
 import { EditorProvider } from "@/components/providers/editor-provider";
+import type { Article } from "@/types/custom.types";
 
 type PropTypes = {
   defaultContent: string;
   slug: string;
-  articleData: ArticleData;
+  articleData: Article;
   imgPath: string | null;
   published: boolean;
 };

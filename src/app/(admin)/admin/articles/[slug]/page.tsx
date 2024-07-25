@@ -35,21 +35,12 @@ export default async function ArticlePage({
     return;
   }
 
-  const articleData = {
-    title: data.title || "",
-    author: `${data.profiles?.first_name} ${data.profiles?.last_name}`,
-    category: data.category,
-    intro: data.category,
-    thumbnail: data.thumbnail || "",
-    profile: data.profiles?.profile_image || undefined
-  };
-
   return (
     <main className="">
       <div>
         <Tiptap
           imgPath={data.thumbnail_path}
-          articleData={articleData}
+          articleData={data}
           slug={params.slug}
           defaultContent={historyId ? historyDescripton : data.content || ""}
           published={data.status === "published"}

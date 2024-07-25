@@ -11,9 +11,8 @@ import { Suspense } from "react";
 
 import { Author } from "@/components/author";
 import { createClient } from "@/lib/supabase/server";
-import { Article } from "contentlayer/generated";
 import { addIds, getHTMLHeadings, getReadTime } from "@/lib/get-html-headings";
-
+import type { Article } from "@/types/custom.types";
 export default async function Page({ params }: { params: { slug: string; category: string } }) {
   const supabase = createClient();
   const { error, data } = await supabase
@@ -38,10 +37,10 @@ export default async function Page({ params }: { params: { slug: string; categor
     params.category === "history"
       ? "text-error-600 dark:text-error-200"
       : params.category === "geography"
-        ? "text-secondary-600 dark:text-secondary-200"
-        : params.category === "environment"
-          ? "text-success-600 dark:text-success-200"
-          : "text-tertiary-600 dark:text-tertiary-200";
+      ? "text-secondary-600 dark:text-secondary-200"
+      : params.category === "environment"
+      ? "text-success-600 dark:text-success-200"
+      : "text-tertiary-600 dark:text-tertiary-200";
 
   return (
     <>

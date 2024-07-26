@@ -4,13 +4,13 @@ import photo from "@/assets/article-demo.png";
 import { FeatureList } from "./_components/feature-list";
 import { Hero } from "./_components/hero";
 import { Badge, WindowFrame } from "@aomdev/ui";
-import { allBlogs } from "contentlayer/generated";
 import { GradientText } from "@/components/gradient-text";
 import Link from "next/link";
 import { Author } from "@/components/author";
+import { getBlogs } from "@/lib/get-blogs";
 
 export default async function Home() {
-  const [firstBlog] = allBlogs;
+  const [firstBlog] = await getBlogs();
   const [firstName, lastName] = firstBlog.author.split(" ");
   return (
     <main>

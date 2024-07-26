@@ -1,7 +1,4 @@
 import type { JSONContent } from "@tiptap/react";
-import type { Article } from "contentlayer/generated";
-
-export type ArticleData = Omit<Article, "_id" | "_raw" | "body" | "type" | "slug">;
 
 export function createMarkdown(content: JSONContent) {
   let markdown = "";

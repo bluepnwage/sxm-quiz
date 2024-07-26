@@ -19,8 +19,8 @@ type ArticleData = {
 const contentFolder = path.join(process.cwd(), "src", "content");
 
 export function getAllMetadata() {
-  const files = fs.readdirSync(contentFolder).filter(file => file.endsWith(".md"));
-  const metadata = files.map(file => {
+  const files = fs.readdirSync(contentFolder).filter((file) => file.endsWith(".md"));
+  const metadata = files.map((file) => {
     const fileData = fs.readFileSync(path.join(contentFolder, file), "utf8");
     const data = getMetadata(fileData, file);
     return { slug: data.metadata.slug, data };
@@ -54,7 +54,7 @@ function getReadTime(str: string) {
     .trim()
     .replaceAll("\n", " ")
     .split(" ")
-    .filter(s => s);
+    .filter((s) => s);
   return Math.ceil(words.length / wpm);
 }
 
@@ -67,7 +67,7 @@ type Content =
 
 export async function getHeadings(slug: string, folder: "articles" | "blogs"): Promise<Content> {
   try {
-    const file = `${slug}.md`;
+    const file = `${slug}.mdx`;
     const fileData = fs.readFileSync(path.join(contentFolder, folder, file), "utf-8");
     const data = getMetadata(fileData, file, folder);
     const contentHTML = await remark().use(html).use(headingTree).process(data.content);

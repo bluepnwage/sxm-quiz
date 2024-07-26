@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import { SearchIcon, FileText, CircleDot, Newspaper, List, ChevronUp } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { Quiz } from "@/types/custom.types";
-import type { Article, Blog } from "contentlayer/generated";
 import { ScrollArea } from "@aomdev/ui";
+import type { Article } from "@/types/custom.types";
+import { Blog } from "@/types/blog.type";
 
 type PropTypes = {
   multipleChoice: Quiz[];

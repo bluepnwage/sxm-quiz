@@ -3,42 +3,9 @@ import path from "path";
 import html from "remark-html";
 import matter from "gray-matter";
 import { remark } from "remark";
-import format from "date-fns/fp/format";
 import { headingTree } from "./get-headings";
 
-type ArticleData = {
-  type: string;
-  slug: string;
-  title: string;
-  author: string;
-  intro: string;
-  creationDate: string;
-  thumbnail: string;
-};
-
-const contentFolder = path.join(process.cwd(), "src", "content");
-
-export function getAllMetadata() {
-  const files = fs.readdirSync(contentFolder).filter((file) => file.endsWith(".md"));
-  const metadata = files.map((file) => {
-    const fileData = fs.readFileSync(path.join(contentFolder, file), "utf8");
-    const data = getMetadata(fileData, file);
-    return { slug: data.metadata.slug, data };
-  });
-  return metadata;
-}
-
-function getCreationDate(file: string, folder?: "articles" | "blogs") {
-  const stat = fs.statSync(path.join(contentFolder, folder || "", file));
-  return format("PP")(stat.mtime);
-}
-
-function getMetadata(fileData: string, file: string, folder?: "articles" | "blogs") {
-  const { content, data } = matter(fileData);
-  data.slug = file.replace(".md", "");
-  data.creationDate = getCreationDate(file, folder);
-  return { metadata: data as ArticleData, content };
-}
+const contentFolder = path.join(process.cwd(), "src", "app", "(marketing)", "blog", "(blog)");
 
 export type Heading = {
   value: string;
@@ -65,15 +32,15 @@ type Content =
     }
   | { error: false; readTime: number; headings: Heading[] };
 
-export async function getHeadings(slug: string, folder: "articles" | "blogs"): Promise<Content> {
+export async function getHeadings(slug: string): Promise<Content> {
   try {
-    const file = `${slug}.mdx`;
-    const fileData = fs.readFileSync(path.join(contentFolder, folder, file), "utf-8");
-    const data = getMetadata(fileData, file, folder);
+    const fileData = fs.readFileSync(path.join(contentFolder, slug, "page.mdx"), "utf-8");
+    const data = matter(fileData);
     const contentHTML = await remark().use(html).use(headingTree).process(data.content);
+    const readTime = getReadTime(data.content);
     return {
       headings: contentHTML.data.headings as Heading[],
-      readTime: getReadTime(contentHTML.toString()),
+      readTime,
       error: false
     };
   } catch (error) {

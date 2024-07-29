@@ -11,8 +11,10 @@ type PropTypes = {
   category: string;
   position: string;
   author: string;
+  readTime: number;
 };
-export async function Intro({ category, date, intro, thumbnail, title, author, position }: PropTypes) {
+
+export async function Intro({ category, date, intro, thumbnail, title, author, readTime }: PropTypes) {
   const { error, data } = await createClient()
     .from("profiles")
     .select("*")
@@ -40,7 +42,7 @@ export async function Intro({ category, date, intro, thumbnail, title, author, p
           </h1>
         </header>
         <span className="text-gray-600 dark:text-gray-300 font-medium text-sm block mb-6">
-          {date} - min read
+          {date} - {readTime} min read
         </span>
         <p
           style={{ width: "clamp(36ch, 90%, 75ch)" }}

@@ -1,7 +1,5 @@
 import Image from "next/image";
 import { Badge, Title } from "@aomdev/ui";
-import { Avatar } from "@/components/avatar";
-import { formatDate } from "@/lib/format-date";
 import Link from "next/link";
 import { Author } from "@/components/author";
 import { getBlogs } from "@/lib/get-blogs";

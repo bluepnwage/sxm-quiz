@@ -11,16 +11,16 @@ import { getCatColor } from "@/get-category-color";
 import { RandomFacts } from "./_components/random-facts";
 import { getRandomFacts } from "@/lib/data-fetch/get-random-facts";
 import { Suspense } from "react";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/client";
 
 export const revalidate = 3600;
 
 export default async function Page() {
-  const supabase = createClient()
+  const supabase = createClient();
 
   const { data, error } = await supabase.from("articles").select("*, profiles (*)");
   if (error) throw new Error("There was an error fetching the articles");
-  const facts = getRandomFacts()
+  const facts = getRandomFacts();
 
   const randomArticle = data[Math.floor(Math.random() * data.length)];
 

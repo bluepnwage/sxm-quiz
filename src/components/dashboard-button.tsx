@@ -1,15 +1,24 @@
+"use client";
 import Link from "next/link";
 import { buttonStyles } from "@aomdev/ui/src/button/styles";
-import { getUser } from "@/lib/data-fetch/get-user";
+import { useUser } from "@/lib/hooks/use-user";
 
-export async function DashboardButton() {
-  const { error, data } = await getUser()
-  if (error) return null
+export function DashboardButton() {
+  const { data, isLoading, error } = useUser();
+  if (isLoading || error)
+    return (
+      <Link
+        href={"/signin"}
+        className={buttonStyles({ variant: "neutral", size: "sm" })}
+      >
+        Sign in
+      </Link>
+    );
   return (
     <>
       <Link
         className={buttonStyles({ variant: "neutral", size: "sm" })}
-        href={data.role === "admin" ? "/admin" : "/dashboard"}
+        href={data?.role === "admin" ? "/admin" : "/dashboard"}
       >
         Account
       </Link>

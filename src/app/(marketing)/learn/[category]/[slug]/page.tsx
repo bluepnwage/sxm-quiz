@@ -10,16 +10,22 @@ import { ArticleEvent } from "./article-event";
 import { Suspense } from "react";
 
 import { Author } from "@/components/author";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/client";
 import { addIds, getHTMLHeadings, getReadTime } from "@/lib/get-html-headings";
 import type { Article } from "@/types/custom.types";
+import { getArticle, getArticles } from "@/lib/data-fetch/get-articles";
+
+export async function generateStaticParams() {
+  const { data, error } = await getArticles();
+  if (error) throw new Error(error.message, { cause: error });
+  return data.map((article) => ({
+    slug: article.slug
+  }));
+}
+
 export default async function Page({ params }: { params: { slug: string; category: string } }) {
   const supabase = createClient();
-  const { error, data } = await supabase
-    .from("articles")
-    .select("*, profiles(*)")
-    .eq("slug", params.slug)
-    .single();
+  const { error, data } = await getArticle(params.slug);
   const { error: relatedError, data: relatedData } = await supabase
     .from("articles")
     .select("intro, title, thumbnail, category, slug")

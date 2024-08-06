@@ -1,6 +1,6 @@
 import { Title } from "@aomdev/ui";
 import { Article } from "../_components/article";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/client";
 
 const categories = ["history", "geography", "environment", "economy"];
 

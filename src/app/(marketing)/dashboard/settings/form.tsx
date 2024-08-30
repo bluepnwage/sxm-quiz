@@ -3,7 +3,7 @@
 import { FormButton } from "@/components/form-button";
 import { ProfileDropzone } from "@/components/profile-dropzone";
 import { useActionState } from "@/lib/hooks/use-action-state";
-import { Alert, TextInput } from "@aomdev/ui";
+import { TextInput } from "@aomdev/ui";
 import { UserSchemaType, updateUser } from "./actions";
 import { toast } from "sonner";
 
@@ -25,7 +25,7 @@ export function UserForm({ first_name, last_name, profile_image }: PropTypes) {
   return (
     <>
       <form
-        className="w-1/2 mx-auto  space-y-4 mb-20"
+        className="space-y-6"
         action={formAction}
       >
         <ProfileDropzone defaultImg={profile_image || ""} />
@@ -42,7 +42,12 @@ export function UserForm({ first_name, last_name, profile_image }: PropTypes) {
           defaultValue={last_name || ""}
           error={state.inputErrors?.last_name?.join("\n")}
         />
-        <FormButton fullWidth>Submit</FormButton>
+        <FormButton
+          className="ml-auto"
+          variant={"neutral"}
+        >
+          Save
+        </FormButton>
       </form>
     </>
   );

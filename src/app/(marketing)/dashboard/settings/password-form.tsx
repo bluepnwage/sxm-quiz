@@ -50,7 +50,12 @@ export function PasswordForm() {
             : ""
         }
       />
-      <Button disabled={isNotEqual || !passwords.new_password}>Save</Button>
+      <Button
+        className="ml-auto"
+        disabled={isNotEqual || !passwords.new_password}
+      >
+        Save
+      </Button>
     </form>
   );
 }

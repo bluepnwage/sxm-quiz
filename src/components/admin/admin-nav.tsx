@@ -15,17 +15,24 @@ import { SignOut } from "./signout";
 import dynamic from "next/dynamic";
 import { ThemeLoading } from "./theme-loading";
 import { Suspense } from "react";
+import { SubLinks } from "./sub-link";
 
 const ThemeToggle = dynamic(() => import("@/components/admin/theme"), {
   ssr: false,
   loading: () => <ThemeLoading />
 });
 
-function createLink(label: string, href: string, Icon: LucideIcon) {
+function createLink(
+  label: string,
+  href: string,
+  Icon: LucideIcon,
+  subLinks?: { label: string; href: string }[]
+) {
   return {
     label,
     href: `/admin/${href}`,
-    Icon
+    Icon,
+    subLinks: subLinks?.map((link) => ({ href: `/admin/${href}/${link.href}`, label: link.label }))
   };
 }
 
@@ -33,7 +40,7 @@ const links = [
   createLink("Home", "", Home),
   createLink("Quizzes", "quizzes", FilePen),
   createLink("Articles", "articles", Book),
-  createLink("Settings", "settings", Settings)
+  createLink("Settings", "settings", Settings, [{ href: "random-facts", label: "Random facts" }])
 ];
 
 export function AdminNav() {
@@ -57,23 +64,38 @@ export function AdminNav() {
               <Search size={14} />
               Search
             </div>
-            <kbd className="dark:bg-gray-800 bg-gray-100 border border-gray-300 dark:border-gray-700 rounded px-1">CTRL K</kbd>
+            <kbd className="dark:bg-gray-800 bg-gray-100 border border-gray-300 dark:border-gray-700 rounded px-1">
+              CTRL K
+            </kbd>
           </button>
           <nav className="w-full">
             <ul className="space-y-4">
               {links.map((link) => {
                 return (
                   <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="hover:dark:bg-neutral-600/30 hover:bg-neutral-200/30 w-full p-2 rounded flex items-center"
-                    >
-                      <link.Icon
-                        size={16}
-                        className="inline-block mr-2 dark:text-gray-300"
+                    {!link.subLinks ? (
+                      <Link
+                        href={link.href}
+                        className="hover:dark:bg-neutral-600/30 hover:bg-neutral-200/30 w-full p-2 rounded flex items-center"
+                      >
+                        <link.Icon
+                          size={16}
+                          className="inline-block mr-2 dark:text-gray-300"
+                        />
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <SubLinks
+                        {...link}
+                        Icon={
+                          <link.Icon
+                            size={16}
+                            className="inline-block mr-2 dark:text-gray-300"
+                          />
+                        }
+                        subLinks={link.subLinks}
                       />
-                      {link.label}
-                    </Link>
+                    )}
                   </li>
                 );
               })}

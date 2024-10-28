@@ -14,6 +14,7 @@ import { createClient } from "@/lib/supabase/client";
 import { addIds, getHTMLHeadings, getReadTime } from "@/lib/get-html-headings";
 import type { Article } from "@/types/custom.types";
 import { getArticle, getArticles } from "@/lib/data-fetch/get-articles";
+import { Metadata } from "next";
 
 export async function generateStaticParams() {
   const { data, error } = await getArticles();
@@ -21,6 +22,37 @@ export async function generateStaticParams() {
   return data.map((article) => ({
     slug: article.slug
   }));
+}
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const article = await getArticle(params.slug);
+  if (article.error) notFound();
+  const url = new URL("/api/og", process.env.VERCEL_URL || "http://localhost:3000");
+  url.searchParams.set("title", article.data.title);
+  url.searchParams.set(
+    "author",
+    `${article.data?.profiles?.first_name} ${article.data?.profiles?.last_name}`
+  );
+
+  return {
+    openGraph: {
+      title: article.data.title,
+      description: article.data.intro,
+      url: "https://nextjs.org",
+      siteName: "Next.js",
+      images: [
+        {
+          url: url.toString(), // Must be an absolute URL
+          width: 1200,
+          height: 630,
+          alt: `SXM Quiz header for an article titled '${article.data.title}', by ${article.data?.profiles?.first_name} ${article.data?.profiles?.last_name}`
+        }
+      ],
+
+      locale: "en_US",
+      type: "website"
+    }
+  };
 }
 
 export default async function Page({ params }: { params: { slug: string; category: string } }) {

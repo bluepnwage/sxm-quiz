@@ -22,6 +22,7 @@ export const getCachedArticles = nextCache(
 );
 
 export const getArticles = cache(async () => {
+  const t = createClient().from("articles").select;
   const { data, error } = await createClient().from("articles").select("*").neq("status", "in_review");
   if (error) {
     return {

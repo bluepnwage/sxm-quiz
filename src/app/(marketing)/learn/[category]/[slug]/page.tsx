@@ -27,7 +27,11 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const article = await getArticle(params.slug);
   if (article.error) notFound();
-  const url = new URL("/api/og", process.env.VERCEL_URL || "http://localhost:3000");
+
+  const url = new URL(
+    "/api/og",
+    process.env.VERCEL_ENV !== "development" ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"
+  );
   url.searchParams.set("title", article.data.title);
   url.searchParams.set(
     "author",

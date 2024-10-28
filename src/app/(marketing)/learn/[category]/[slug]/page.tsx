@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
   const url = new URL(
     "/api/og",
-    process.env.VERCEL_ENV !== "development" ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"
+    process.env.VERCEL_ENV !== "development" ? `https://sxm-quiz.vercel.app/` : "http://localhost:3000"
   );
   url.searchParams.set("title", article.data.title);
   url.searchParams.set(
